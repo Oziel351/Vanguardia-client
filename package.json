@@ -4,14 +4,21 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --host",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview"
   },
   "dependencies": {
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.0",
+    "@mui/material": "^6.4.7",
+    "@tailwindcss/vite": "^4.0.14",
+    "@types/react-router-dom": "^5.3.3",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.0.0",
+    "react-router-dom": "^7.3.0",
+    "tailwindcss": "^4.0.14"
   },
   "devDependencies": {
     "@eslint/js": "^9.21.0",
