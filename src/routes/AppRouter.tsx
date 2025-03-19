@@ -5,7 +5,7 @@ import {
 } from "react-router-dom";
 import { NotFound } from "../pages/NotFound";
 import { LoginPage } from "../pages/Login";
-import { PublicRoutes } from "./PublicRoutes";
+import { ProtectedRoutes } from "./ProtectedRoutes";
 
 const routes = createBrowserRouter([
   {
@@ -14,7 +14,7 @@ const routes = createBrowserRouter([
   },
   {
     path: "/login",
-    element: <PublicRoutes />,
+    element: <ProtectedRoutes />,
     children: [{ element: <LoginPage /> }],
   },
 
