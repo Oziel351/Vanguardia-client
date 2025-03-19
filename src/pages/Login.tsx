@@ -1,4 +1,4 @@
-import { Button, Input, TextField } from "@mui/material";
+import { Button, TextField } from "@mui/material";
 import Logo_Vanguardia from "../assets/images/Logo_Vanguardia.png";
 
 export const LoginPage = () => {

@@ -7,8 +7,7 @@ WORKDIR /app
 # Copy package files first to leverage caching
 COPY package.json package-lock.json ./
 
-# Install dependencies
-RUN npm ci
+
 
 # Copy the entire project
 COPY . .
