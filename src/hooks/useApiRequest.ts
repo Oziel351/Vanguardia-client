@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { ApiRequest } from "../utils/apiRequest";
+import { api_url } from "../utils/constants";
 
 interface UseApiRequestResult<T> {
   data: T | null;
@@ -20,9 +21,13 @@ export const useApiRequest = <T>(): UseApiRequestResult<T> => {
     setError(null);
 
     try {
-      const response = await ApiRequest<T>(endpoint, method, body);
+      const response = await ApiRequest<T>(
+        `${api_url}${endpoint}`,
+        method,
+        body
+      );
 
-      console.log(response, "response");
+      console.log(response.data, "response");
 
       setData(response.data?.data);
     } catch (err: any) {

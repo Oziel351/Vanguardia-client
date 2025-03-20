@@ -1,9 +1,17 @@
 import { Navigate } from "react-router-dom";
-import { LoginPage } from "../pages/Login";
 import { useAuth } from "../state/context/AuthContext";
+import React, { ReactNode } from "react";
 
-export const ProtectedRoutes = () => {
+interface ProtectedRoutesProps {
+  children: ReactNode;
+}
+
+export const ProtectedRoutes: React.FC<ProtectedRoutesProps> = ({
+  children,
+}) => {
   const { state } = useAuth();
+  console.log("state", state);
 
-  return state.isAuthenticated ? <Navigate to="/dashboard" /> : <LoginPage />;
+  if (!state.isAuthenticated) return <Navigate to="/login" />;
+  return <>{children}</>;
 };

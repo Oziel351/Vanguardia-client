@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useReducer } from "react";
+import React, { createContext, ReactNode, useContext, useReducer } from "react";
 import { Roles } from "../../utils/common.types";
 import {
   AuthAction,
@@ -23,8 +23,8 @@ const AuthContext = createContext<
 >(undefined);
 
 //The context provider is a component that will wrap the entire application
-const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-  const [state, dispatch] = useReducer(authReducer, initialAuthState);
+const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+  const [state, dispatch] = useReducer(authReducer, initialAuthState());
 
   return (
     <AuthContext.Provider value={{ state, dispatch }}>

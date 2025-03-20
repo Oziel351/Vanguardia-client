@@ -44,7 +44,12 @@ export const LoginPage = () => {
               setFormData({ ...formData, password: e.target.value })
             }
           />
-          <Button variant="contained" className="w-96" onClick={handleLogin}>
+          <Button
+            variant="contained"
+            className="w-96"
+            onClick={handleLogin}
+            disabled={!formData.email || !formData.password}
+          >
             Iniciar Sesión
           </Button>
         </div>
