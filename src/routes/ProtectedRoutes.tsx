@@ -6,12 +6,13 @@ interface ProtectedRoutesProps {
   children: ReactNode;
 }
 
-export const ProtectedRoutes: React.FC<ProtectedRoutesProps> = ({
-  children,
-}) => {
+const ProtectedRoutes: React.FC<ProtectedRoutesProps> = ({ children }) => {
   const { state } = useAuth();
-  console.log("state", state);
 
-  if (!state.isAuthenticated) return <Navigate to="/login" />;
+  if (!state.isAuthenticated) {
+    return <Navigate to="/login" />;
+  }
   return <>{children}</>;
 };
+
+export default ProtectedRoutes;

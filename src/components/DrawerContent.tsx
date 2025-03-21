@@ -18,6 +18,7 @@ import {
   VisibilityOutlined,
 } from "@mui/icons-material";
 import Logo_Vanguardia from "../assets/images/Logo_Vanguardia.png";
+import Clients from "../pages/administrator/Clients";
 
 const modules = [
   { name: "Dashboard", path: "/home/dashboard", icon: <DashboardOutlined /> },
@@ -67,7 +68,7 @@ export const DrawerContent = () => {
             {modules.map(({ name, path, icon }) => (
               <ListItem key={name} disablePadding>
                 <ListItemButton
-                  onClick={() => navigate(path)}
+                  onClick={() => navigate(path, { replace: true })}
                   sx={{
                     "&:hover": { backgroundColor: "#2A2A3A" },
                   }}
@@ -95,12 +96,14 @@ export const DrawerContent = () => {
 
       <Box
         component="main"
-        flexGrow={1}
-        p={3}
+        p={2}
         minHeight="100vh"
-        minWidth="100vw"
+        minWidth="82vw"
+        marginLeft={30}
       >
-        <Outlet />
+        <div className=" bg-white h-full shadow-lg rounded-lg p-4">
+          <Outlet />
+        </div>
       </Box>
     </Box>
   );

@@ -25,7 +25,7 @@ const AuthContext = createContext<
 //The context provider is a component that will wrap the entire application
 const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [state, dispatch] = useReducer(authReducer, initialAuthState());
-
+  console.log("state", state);
   return (
     <AuthContext.Provider value={{ state, dispatch }}>
       {children}
