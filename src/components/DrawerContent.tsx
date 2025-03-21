@@ -18,7 +18,6 @@ import {
   VisibilityOutlined,
 } from "@mui/icons-material";
 import Logo_Vanguardia from "../assets/images/Logo_Vanguardia.png";
-import Clients from "../pages/administrator/Clients";
 
 const modules = [
   { name: "Dashboard", path: "/home/dashboard", icon: <DashboardOutlined /> },
@@ -101,7 +100,7 @@ export const DrawerContent = () => {
         minWidth="82vw"
         marginLeft={30}
       >
-        <div className=" bg-white h-full shadow-lg rounded-lg p-4">
+        <div className=" bg-white h-full shadow-2xl rounded-lg p-4">
           <Outlet />
         </div>
       </Box>
