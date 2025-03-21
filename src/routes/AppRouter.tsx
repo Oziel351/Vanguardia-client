@@ -5,7 +5,7 @@ import {
 } from "react-router-dom";
 import { NotFound } from "../pages/NotFound";
 import { LoginPage } from "../pages/Login";
-import { ProtectedRoutes } from "./ProtectedRoutes";
+import ProtectedRoutes from "./ProtectedRoutes";
 import { Home } from "../pages/Home";
 import { Dashboard } from "../pages/administrator/Dashboard";
 import Clients from "../pages/administrator/Clients";
@@ -23,17 +23,13 @@ const routes = createBrowserRouter([
   },
   {
     path: "/home",
-    element: (
-      <ProtectedRoutes>
-        <Home />
-      </ProtectedRoutes>
-    ),
+    element: <ProtectedRoutes children={<Home />} />,
     children: [
+      { index: true, element: <Navigate to="dashboard" replace /> },
       { path: "dashboard", element: <Dashboard /> },
       { path: "clients", element: <Clients /> },
       { path: "technicians", element: <Technicians /> },
       { path: "surveillance", element: <Surveillance /> },
-      { path: "*", element: <Navigate to="dashboard" /> },
     ],
   },
 

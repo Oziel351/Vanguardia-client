@@ -3,7 +3,7 @@ import Logo_Vanguardia from "../assets/images/Logo_Vanguardia.png";
 import { useState } from "react";
 import { useAuthActions } from "../state/actions/useAuthActions";
 
-export const LoginPage = () => {
+export const LoginPage: React.FC = () => {
   const [formData, setFormData] = useState({ email: "", password: "" });
 
   const { login } = useAuthActions();
