@@ -24,3 +24,12 @@ export enum CustomerType {
   RESIDENTIAL = "Residencial",
   COMMERCIAL = "Comercial",
 }
+
+export enum ModalActions {
+  CREATE = "Crear",
+  VIEW = "Ver",
+  EDIT = "Editar",
+  DELETE = "Eliminar",
+  ENABLE = "Activar",
+  DISABLE = "Desactivar",
+}

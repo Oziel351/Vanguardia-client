@@ -16,8 +16,10 @@ import {
   TableHead,
   TablePagination,
   TableRow,
+  Tooltip,
 } from "@mui/material";
 import { useState } from "react";
+import { ModalActions } from "../utils/common.types";
 
 interface TableHandlerProps {
   data: any[];
@@ -25,11 +27,7 @@ interface TableHandlerProps {
   rowKey: string;
   className?: string;
   isLoading: boolean;
-  onView?: (row: any) => void;
-  onEdit?: (row: any) => void;
-  onDelete?: (row: any) => void;
-  onEnable?: (row: any) => void;
-  onDisable?: (row: any) => void;
+  onAction: (actionType: ModalActions, row: any) => void;
 }
 
 const TableHandler: React.FC<TableHandlerProps> = ({
@@ -38,20 +36,12 @@ const TableHandler: React.FC<TableHandlerProps> = ({
   rowKey,
   className,
   isLoading,
-  onView,
-  onEdit,
-  onDelete,
-  onEnable,
-  onDisable,
+  onAction,
 }) => {
   const [page, setPage] = useState(0);
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
-  };
-
-  const handleAction = (action: (row: any) => void, row: any) => {
-    action(row);
   };
 
   return (
@@ -63,7 +53,7 @@ const TableHandler: React.FC<TableHandlerProps> = ({
               {columns.map((column, index) => (
                 <TableCell key={index}>{column.title}</TableCell>
               ))}
-              <TableCell>Actions</TableCell>
+              <TableCell>Acciones</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -90,37 +80,45 @@ const TableHandler: React.FC<TableHandlerProps> = ({
                       </TableCell>
                     ))}
                     <TableCell>
-                      <IconButton
-                        onClick={() => onView && handleAction(onView, row)}
-                      >
-                        <Visibility />
-                      </IconButton>
-                      <IconButton
-                        onClick={() => onEdit && handleAction(onEdit, row)}
-                      >
-                        <Edit />
-                      </IconButton>
-                      <IconButton
-                        onClick={() => onDelete && handleAction(onDelete, row)}
-                      >
-                        <Delete />
-                      </IconButton>
+                      <Tooltip title="Ver">
+                        <IconButton
+                          onClick={() => onAction(ModalActions.VIEW, row)}
+                        >
+                          <Visibility className="text-blue-500 hover:text-blue-700" />
+                        </IconButton>
+                      </Tooltip>
+
+                      <Tooltip title="Editar">
+                        <IconButton
+                          onClick={() => onAction(ModalActions.EDIT, row)}
+                        >
+                          <Edit className="text-orange-500 hover:text-orange-700" />
+                        </IconButton>
+                      </Tooltip>
+
+                      <Tooltip title="Eliminar">
+                        <IconButton
+                          onClick={() => onAction(ModalActions.DELETE, row)}
+                        >
+                          <Delete />
+                        </IconButton>
+                      </Tooltip>
                       {row.isEnabled ? (
-                        <IconButton
-                          onClick={() =>
-                            onDisable && handleAction(onDisable, row)
-                          }
-                        >
-                          <ToggleOff />
-                        </IconButton>
+                        <Tooltip title="Desactivar">
+                          <IconButton
+                            onClick={() => onAction(ModalActions.DISABLE, row)}
+                          >
+                            <ToggleOff />
+                          </IconButton>
+                        </Tooltip>
                       ) : (
-                        <IconButton
-                          onClick={() =>
-                            onEnable && handleAction(onEnable, row)
-                          }
-                        >
-                          <ToggleOn />
-                        </IconButton>
+                        <Tooltip title="Activar">
+                          <IconButton
+                            onClick={() => onAction(ModalActions.ENABLE, row)}
+                          >
+                            <ToggleOn />
+                          </IconButton>
+                        </Tooltip>
                       )}
                     </TableCell>
                   </TableRow>

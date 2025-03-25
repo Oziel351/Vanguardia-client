@@ -11,6 +11,7 @@ import {
 import { Outlet, useNavigate } from "react-router-dom";
 import { useAuthActions } from "../state/actions/useAuthActions";
 import {
+  AssignmentOutlined,
   DashboardOutlined,
   EngineeringOutlined,
   LogoutOutlined,
@@ -19,13 +20,18 @@ import {
 } from "@mui/icons-material";
 import Logo_Vanguardia from "../assets/images/Logo_Vanguardia.png";
 
-const modules = [
+const MODULES = [
   { name: "Dashboard", path: "/home/dashboard", icon: <DashboardOutlined /> },
   { name: "Clients", path: "/home/clients", icon: <PeopleAltOutlined /> },
   {
     name: "Technicians",
     path: "/home/technicians",
     icon: <EngineeringOutlined />,
+  },
+  {
+    name: "Tareas",
+    path: "/home/tasks",
+    icon: <AssignmentOutlined />,
   },
   {
     name: "Rutinas de vigilancia",
@@ -57,19 +63,20 @@ export const DrawerContent = () => {
             <img
               src={Logo_Vanguardia}
               alt="Logo Vanguardia"
-              style={{ width: 150 }}
+              style={{ width: 140 }}
             />
           </div>
 
           <hr className="border-[#D9D9D9] m-2 " />
 
           <List>
-            {modules.map(({ name, path, icon }) => (
+            {MODULES.map(({ name, path, icon }) => (
               <ListItem key={name} disablePadding>
                 <ListItemButton
                   onClick={() => navigate(path, { replace: true })}
                   sx={{
                     "&:hover": { backgroundColor: "#2A2A3A" },
+                    transition: "all 0.3s ease-in-out",
                   }}
                 >
                   <ListItemIcon sx={{ color: "white" }}>{icon}</ListItemIcon>
@@ -100,9 +107,9 @@ export const DrawerContent = () => {
         minWidth="82vw"
         marginLeft={30}
       >
-        <div className=" bg-white h-full shadow-2xl rounded-lg p-4">
+        <>
           <Outlet />
-        </div>
+        </>
       </Box>
     </Box>
   );
