@@ -8,7 +8,7 @@ import {
   ListItemIcon,
   ListItemText,
 } from "@mui/material";
-import { Outlet, useNavigate } from "react-router-dom";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { useAuthActions } from "../state/actions/useAuthActions";
 import {
   AssignmentOutlined,
@@ -43,6 +43,7 @@ const MODULES = [
 export const DrawerContent = () => {
   const navigate = useNavigate();
   const { logout } = useAuthActions();
+  const location = useLocation();
 
   return (
     <Box display="flex">
@@ -70,20 +71,26 @@ export const DrawerContent = () => {
           <hr className="border-[#D9D9D9] m-2 " />
 
           <List>
-            {MODULES.map(({ name, path, icon }) => (
-              <ListItem key={name} disablePadding>
-                <ListItemButton
-                  onClick={() => navigate(path, { replace: true })}
-                  sx={{
-                    "&:hover": { backgroundColor: "#2A2A3A" },
-                    transition: "all 0.3s ease-in-out",
-                  }}
-                >
-                  <ListItemIcon sx={{ color: "white" }}>{icon}</ListItemIcon>
-                  <ListItemText primary={name} />
-                </ListItemButton>
-              </ListItem>
-            ))}
+            {MODULES.map(({ name, path, icon }) => {
+              const isActive = location.pathname === path;
+              return (
+                <ListItem key={name} disablePadding>
+                  <ListItemButton
+                    onClick={() => navigate(path, { replace: true })}
+                    sx={{
+                      "&:hover": { backgroundColor: "#2A2A3A" },
+                      transition: "all 0.3s ease-in-out",
+                      backgroundColor: isActive ? "#2196f3" : "transparent",
+                      borderRadius: isActive ? "10px" : "0",
+                      padding: isActive ? "12px 20px" : "8px 16px",
+                    }}
+                  >
+                    <ListItemIcon sx={{ color: "white" }}>{icon}</ListItemIcon>
+                    <ListItemText primary={name} />
+                  </ListItemButton>
+                </ListItem>
+              );
+            })}
           </List>
         </Box>
 

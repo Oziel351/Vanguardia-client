@@ -1,15 +1,17 @@
-import { useState } from "react";
 import {
   Box,
   Button,
   FormControlLabel,
+  MenuItem,
   Modal,
+  Select,
   Switch,
   TextField,
   Typography,
 } from "@mui/material";
 import { ModalProps } from "../../utils/interfaces/modal.props";
 import { ClientsProps } from "../../utils/interfaces/interfaces";
+import { useForm } from "react-hook-form";
 
 export const ClientModal: React.FC<ModalProps<ClientsProps>> = ({
   open,
@@ -18,9 +20,17 @@ export const ClientModal: React.FC<ModalProps<ClientsProps>> = ({
   onClose,
   onSuccessful,
 }) => {
-  const [client, setClient] = useState<ClientsProps[]>([]);
+  const {
+    control,
+    handleSubmit,
+    formState: { isDirty },
+  } = useForm<ClientsProps>({
+    defaultValues: data || {},
+  });
 
-  if (!data) return null;
+  const onSubmit = handleSubmit((data) => {
+    console.log(data);
+  });
 
   return (
     <Modal className="" open={open} onClose={onClose}>
@@ -34,12 +44,13 @@ export const ClientModal: React.FC<ModalProps<ClientsProps>> = ({
           height: 600,
           overflow: "auto",
           bgcolor: "background.paper",
-          boxShadow: 24,
           p: 4,
           borderRadius: 2,
         }}
       >
-        <Typography variant="h6">{actions} Cliente</Typography>
+        <Typography variant="h6">
+          <b> {actions} Cliente</b>
+        </Typography>
 
         <Box
           sx={{
@@ -52,43 +63,53 @@ export const ClientModal: React.FC<ModalProps<ClientsProps>> = ({
             label="Nombre"
             variant="outlined"
             fullWidth
-            value={data.name}
+            value={data?.name}
+            disabled={actions !== "Editar" ? true : false}
           />
           <TextField
             label="Contacto"
             variant="outlined"
             fullWidth
-            value={data.contact.name}
+            value={data?.contact.name}
+            disabled={actions !== "Editar" ? true : false}
           />
           <TextField
             label="Teléfono"
             variant="outlined"
             fullWidth
-            value={data.contact.phone}
+            value={data?.contact.phone}
+            disabled={actions !== "Editar" ? true : false}
           />
           <TextField
             label="Email"
             variant="outlined"
             fullWidth
-            value={data.contact.email}
+            value={data?.contact.email}
+            disabled={actions !== "Editar" ? true : false}
           />
           <TextField
             label="Dirección"
             variant="outlined"
             fullWidth
-            value={data.address}
+            value={data?.address}
+            disabled={actions !== "Editar" ? true : false}
           />
-          <TextField
+          <Select
             label="Tipo de Cliente"
             variant="outlined"
             fullWidth
-            value={data.customerType}
-          />
+            value={data?.customerType || "Residencial"}
+            disabled={actions !== "Editar" || "Crear" ? true : false}
+          >
+            <MenuItem value="Residencial">Residencial</MenuItem>
+            <MenuItem value="Comercial">Comercial</MenuItem>
+          </Select>
 
           <Box sx={{ gridColumn: "span 2" }}>
             <FormControlLabel
-              control={<Switch checked={data.enable} />}
+              control={<Switch checked={data?.enable} />}
               label="Habilitado"
+              disabled={actions !== "Editar" ? true : false}
             />
           </Box>
         </Box>
@@ -97,7 +118,7 @@ export const ClientModal: React.FC<ModalProps<ClientsProps>> = ({
           Instalaciones
         </Typography>
 
-        {data.installations.equipment.map((equip, index) => (
+        {data?.installations.equipment.map((equip, index) => (
           <Box
             key={index}
             sx={{
@@ -112,6 +133,7 @@ export const ClientModal: React.FC<ModalProps<ClientsProps>> = ({
               variant="outlined"
               fullWidth
               value={equip.type}
+              disabled={actions !== "Editar" ? true : false}
             />
             {equip.model && (
               <TextField
@@ -119,6 +141,7 @@ export const ClientModal: React.FC<ModalProps<ClientsProps>> = ({
                 variant="outlined"
                 fullWidth
                 value={equip.model}
+                disabled={actions !== "Editar" ? true : false}
               />
             )}
             {equip.serialNumber && (
@@ -127,17 +150,24 @@ export const ClientModal: React.FC<ModalProps<ClientsProps>> = ({
                 variant="outlined"
                 fullWidth
                 value={equip.serialNumber}
+                disabled={actions !== "Editar" ? true : false}
               />
             )}
           </Box>
         ))}
 
-        <TextField
+        <Select
           label="Estado"
           variant="outlined"
           fullWidth
-          value={data.installations.status}
-        />
+          value={data?.installations.status || "Pendiente"}
+          disabled={actions !== "Editar" ? true : false}
+        >
+          <MenuItem value="Pendiente">Pendiente</MenuItem>
+          <MenuItem value="Completado">Completado</MenuItem>
+          <MenuItem value="En Proceso">En Proceso</MenuItem>
+          <MenuItem value="Cancelado">Cancelado</MenuItem>
+        </Select>
 
         <Typography variant="h6" sx={{ mt: 2 }}>
           Mantenimiento
@@ -154,21 +184,33 @@ export const ClientModal: React.FC<ModalProps<ClientsProps>> = ({
             label="Descripción"
             variant="outlined"
             fullWidth
-            value={data.maintenance.description}
+            value={data?.maintenance.description}
+            disabled={actions !== "Editar" ? true : false}
           />
-          <TextField
+          <Select
             label="Estado"
             variant="outlined"
             fullWidth
-            value={data.maintenance.status}
-          />
+            value={data?.maintenance.status || "Pendiente"}
+            disabled={actions !== "Editar" ? true : false}
+          >
+            <MenuItem value="Pendiente">Pendiente</MenuItem>
+            <MenuItem value="Completado">Completado</MenuItem>
+            <MenuItem value="En Proceso">En Proceso</MenuItem>
+            <MenuItem value="Cancelado">Cancelado</MenuItem>
+          </Select>
         </Box>
 
         <Box sx={{ display: "flex", justifyContent: "flex-end", mt: 2 }}>
           <Button onClick={onClose} color="error" variant="contained">
             Cancelar
           </Button>
-          <Button color="primary" sx={{ ml: 2 }} variant="contained">
+          <Button
+            color="primary"
+            sx={{ ml: 2 }}
+            variant="contained"
+            disabled={actions === "Ver" && isDirty}
+          >
             {actions} cliente
           </Button>
         </Box>

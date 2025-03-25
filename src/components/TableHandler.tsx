@@ -1,5 +1,9 @@
 import {
+  CheckBox,
+  CheckBoxOutlineBlank,
   Delete,
+  DeleteForever,
+  DeleteForeverOutlined,
   Edit,
   ToggleOff,
   ToggleOn,
@@ -84,7 +88,7 @@ const TableHandler: React.FC<TableHandlerProps> = ({
                         <IconButton
                           onClick={() => onAction(ModalActions.VIEW, row)}
                         >
-                          <Visibility className="text-blue-500 hover:text-blue-700" />
+                          <Visibility className="text-blue-700 hover:text-blue-800" />
                         </IconButton>
                       </Tooltip>
 
@@ -92,7 +96,7 @@ const TableHandler: React.FC<TableHandlerProps> = ({
                         <IconButton
                           onClick={() => onAction(ModalActions.EDIT, row)}
                         >
-                          <Edit className="text-orange-500 hover:text-orange-700" />
+                          <Edit className="text-orange-600 hover:text-orange-700" />
                         </IconButton>
                       </Tooltip>
 
@@ -100,7 +104,7 @@ const TableHandler: React.FC<TableHandlerProps> = ({
                         <IconButton
                           onClick={() => onAction(ModalActions.DELETE, row)}
                         >
-                          <Delete />
+                          <DeleteForever className="text-red-700 hover:text-red-800" />
                         </IconButton>
                       </Tooltip>
                       {row.isEnabled ? (
@@ -108,7 +112,7 @@ const TableHandler: React.FC<TableHandlerProps> = ({
                           <IconButton
                             onClick={() => onAction(ModalActions.DISABLE, row)}
                           >
-                            <ToggleOff />
+                            <CheckBoxOutlineBlank />
                           </IconButton>
                         </Tooltip>
                       ) : (
@@ -116,7 +120,7 @@ const TableHandler: React.FC<TableHandlerProps> = ({
                           <IconButton
                             onClick={() => onAction(ModalActions.ENABLE, row)}
                           >
-                            <ToggleOn />
+                            <CheckBox className="text-green-700 hover:text-green-800" />
                           </IconButton>
                         </Tooltip>
                       )}

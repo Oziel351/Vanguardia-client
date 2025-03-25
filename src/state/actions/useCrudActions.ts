@@ -1,6 +1,6 @@
 import { useApiRequest } from "../../hooks/useApiRequest";
 
-const useCrudActions = <T>(entity: string) => {
+const useActionsApi = <T>(entity: string) => {
   const { data, isLoading, error, fetchData } = useApiRequest<T>();
 
   const retrieve = async () => {
@@ -40,4 +40,4 @@ const useCrudActions = <T>(entity: string) => {
   };
 };
 
-export default useCrudActions;
+export default useActionsApi;

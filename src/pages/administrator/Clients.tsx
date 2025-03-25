@@ -1,11 +1,15 @@
 import { useEffect, useState } from "react";
 import useCrudActions from "../../state/actions/useCrudActions";
 import TableHandler from "../../components/TableHandler";
-import { Button, Chip } from "@mui/material";
+import { Alert, AlertTitle, Button, Chip, Skeleton } from "@mui/material";
 import { ClientsProps } from "../../utils/interfaces/interfaces";
 import { ModalActions } from "../../utils/common.types";
-import { TechnicianModal } from "../../components/modals/TechniciansModal";
 import { ClientModal } from "../../components/modals/ClientModal";
+import {
+  GroupOutlined,
+  PersonAddAlt1Outlined,
+  PersonPinCircle,
+} from "@mui/icons-material";
 
 const CLIENTS_TASKS = [
   {
@@ -43,7 +47,6 @@ const Clients = () => {
   const [clientRow, setClientRow] = useState<ClientsProps | null>(null);
 
   const handleModal = (action: ModalActions, row: ClientsProps | null) => {
-    console.log(action, row, modalOpen);
     setModalAction(action);
     setClientRow(row);
     setModalOpen(true);
@@ -60,29 +63,47 @@ const Clients = () => {
   }, [data]);
 
   return (
-    <div>
-      <h1 className="text-2xl font-semibold text-gray-800">
-        Módulo de Clientes
-      </h1>
-      <hr className="my-4 border-t border-gray-300" />
+    <div className="bg-white p-6 rounded-lg shadow-md">
+      <div className="mb-4">
+        <h1 className="text-2xl font-semibold text-gray-800 flex items-center">
+          <GroupOutlined className="h-12 w-12  mr-2" /> Módulo de Clientes
+        </h1>
+      </div>
 
-      <div className="flex justify-end mb-4">
+      <hr className="mb-4 border-t border-gray-300" />
+
+      <Alert severity="info" className="mb-4">
+        <AlertTitle>Información del Módulo de Clientes</AlertTitle>
+        En este módulo, puedes gestionar la información de los clientes. Una vez
+        creados, son manejados en el apartado de tareas junto con los técnicos
+        para las necesidades que tengan.
+      </Alert>
+      <div className="flex justify-end items-center mb-4">
         <Button
-          className="p-4"
+          className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg flex items-center shadow-md transition-all duration-200"
           variant="contained"
           onClick={() => handleModal(ModalActions.CREATE, null)}
         >
-          Agregar Cliente
+          <PersonAddAlt1Outlined className="h-5 w-5 mr-2" /> Agregar Cliente
         </Button>
       </div>
-      <TableHandler
-        data={client}
-        columns={CLIENTS_TASKS}
-        rowKey="name"
-        isLoading={isLoading}
-        onAction={handleModal}
-      />
 
+      <div className="overflow-hidden rounded-lg shadow-lg">
+        {isLoading ? (
+          <Skeleton height={200} />
+        ) : (
+          <TableHandler
+            data={client}
+            columns={CLIENTS_TASKS}
+            rowKey="name"
+            isLoading={isLoading}
+            onAction={handleModal}
+            className="bg-white border border-gray-200 rounded-lg overflow-hidden"
+          />
+        )}
+      </div>
+
+      {/* Modal */}
       <ClientModal
         open={modalOpen}
         actions={modalAction}
