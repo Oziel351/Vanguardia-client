@@ -5,20 +5,19 @@ import { Alert, AlertTitle, Button, Chip, Skeleton } from "@mui/material";
 import { ClientsProps } from "../../utils/interfaces/interfaces";
 import { ModalActions } from "../../utils/common.types";
 import { ClientModal } from "../../components/modals/ClientModal";
-import {
-  GroupOutlined,
-  PersonAddAlt1Outlined,
-  PersonPinCircle,
-} from "@mui/icons-material";
+import { GroupOutlined, PersonAddAlt1Outlined } from "@mui/icons-material";
+import { DeleteModal } from "../../components/modals/DeleteModal";
 
 const CLIENTS_TASKS = [
   {
     title: "Nombre",
-    dataIndex: "name",
+    dataIndex: "contact",
+    render: (contact: { name: string }) => contact.name,
   },
   {
     title: "Dirección",
-    dataIndex: "address",
+    dataIndex: "contact",
+    render: (contact: { address: string }) => contact.address,
   },
   {
     title: "Tipo de cliente",
@@ -104,13 +103,33 @@ const Clients = () => {
       </div>
 
       {/* Modal */}
-      <ClientModal
-        open={modalOpen}
-        actions={modalAction}
-        data={clientRow}
-        onClose={() => setModalOpen(false)}
-        onSuccessful={() => retrieve()}
-      />
+      {modalAction === ModalActions.DELETE && clientRow?._id ? (
+        <DeleteModal
+          open={modalOpen}
+          _id={clientRow._id}
+          onClose={() => setModalOpen(false)}
+          endpoint="clients"
+          onSuccessful={() => {
+            setModalOpen(false);
+            setTimeout(() => {
+              retrieve();
+            }, 500);
+          }}
+        />
+      ) : (
+        <ClientModal
+          open={modalOpen}
+          actions={modalAction}
+          data={clientRow}
+          onClose={() => setModalOpen(false)}
+          onSuccessful={() => {
+            setModalOpen(false);
+            setTimeout(() => {
+              retrieve();
+            }, 500);
+          }}
+        />
+      )}
     </div>
   );
 };

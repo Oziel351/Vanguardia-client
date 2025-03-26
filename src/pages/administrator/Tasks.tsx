@@ -6,6 +6,7 @@ import { Alert, AlertTitle, Button } from "@mui/material";
 import { Tags } from "../../components/Tags";
 import { TaskProps } from "../../utils/interfaces/interfaces";
 import { AddTask, AssignmentOutlined } from "@mui/icons-material";
+import { TaskModal } from "../../components/modals/TasksModal";
 
 const TASKS_COLUMNS = [
   {
@@ -75,6 +76,17 @@ const Task = () => {
         rowKey="name"
         isLoading={isLoading}
         onAction={handleModal}
+      />
+
+      <TaskModal
+        open={modalOpen}
+        actions={modalAction}
+        data={taskRow}
+        onClose={() => setModalOpen(false)}
+        onSuccessful={() => {
+          retrieve();
+          setModalOpen(false);
+        }}
       />
     </div>
   );

@@ -1,26 +1,19 @@
 import { ActionStatus, CustomerType, TaskType } from "../common.types";
 
 export interface ClientsProps {
-  name: string;
+  _id?: string;
   contact: {
     name: string;
     phone: string;
     email: string;
+    address: string;
   };
-  address: string;
   installations: {
-    equipment: {
-      type: string;
-      model?: string;
-      serialNumber?: string;
-    }[];
-    status: ActionStatus;
-  };
-  maintenance: {
-    requestDay: Date;
+    title: string;
     description: string;
     status: ActionStatus;
-  };
+    requestedDay: Date;
+  }[];
   enable: boolean;
   customerType: CustomerType;
 }
@@ -44,8 +37,11 @@ export interface TaskProps {
   title: string;
   client: string;
   technician: string;
-  taskType: TaskType;
-  scheduleDate: Date;
+  installations: {
+    title: string;
+    description: string;
+    status: ActionStatus;
+    requestedDay: Date;
+  }[];
   notes?: string;
-  status: ActionStatus;
 }

@@ -11,20 +11,22 @@ const useActionsApi = <T>(entity: string) => {
     await fetchData(`/${entity}/create`, "POST", payload);
   };
 
-  const update = async (payload: T) => {
-    await fetchData(`/${entity}/update`, "PATCH", payload);
+  const update = async (payload: T, id: string) => {
+    await fetchData(`/${entity}/update/${id}`, "PATCH", payload);
   };
 
-  const remove = async (id: string) => {
-    await fetchData(`/${entity}/delete`, "DELETE", { id });
+  const remove = async (id: string, payload: string) => {
+    await fetchData(`/${entity}/delete/${id}`, "DELETE", {
+      deleteKey: payload,
+    });
   };
 
   const disable = async (id: string) => {
-    await fetchData(`/${entity}/disable`, "PATCH", { id });
+    await fetchData(`/${entity}/disable/${id}`, "PATCH", { id });
   };
 
   const enable = async (id: string) => {
-    await fetchData(`/${entity}/enable`, "PATCH", { id });
+    await fetchData(`/${entity}/enable/${id}`, "PATCH", { id });
   };
 
   return {
