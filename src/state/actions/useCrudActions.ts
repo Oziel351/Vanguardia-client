@@ -12,7 +12,7 @@ const useActionsApi = <T>(entity: string) => {
   };
 
   const update = async (payload: T, id: string) => {
-    await fetchData(`/${entity}/update/${id}`, "PATCH", payload);
+    await fetchData(`/${entity}/update/${id}`, "PATCH", { payload });
   };
 
   const remove = async (id: string, payload: string) => {

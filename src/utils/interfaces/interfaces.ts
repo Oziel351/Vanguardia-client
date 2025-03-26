@@ -19,6 +19,7 @@ export interface ClientsProps {
 }
 
 export interface TechniciansProps {
+  _id?: string;
   name: string;
   phone: string;
   email: string;
@@ -34,6 +35,7 @@ export interface TechniciansProps {
 }
 
 export interface TaskProps {
+  _id: string;
   title: string;
   client: string;
   technician: string;
