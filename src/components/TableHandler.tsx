@@ -1,12 +1,8 @@
 import {
+  BrowserNotSupportedOutlined,
   CheckBox,
-  CheckBoxOutlineBlank,
-  Delete,
   DeleteForever,
-  DeleteForeverOutlined,
   Edit,
-  ToggleOff,
-  ToggleOn,
   Visibility,
 } from "@mui/icons-material";
 import {
@@ -107,12 +103,12 @@ const TableHandler: React.FC<TableHandlerProps> = ({
                           <DeleteForever className="text-red-700 hover:text-red-800" />
                         </IconButton>
                       </Tooltip>
-                      {row.isEnabled ? (
+                      {row.enable ? (
                         <Tooltip title="Desactivar">
                           <IconButton
                             onClick={() => onAction(ModalActions.DISABLE, row)}
                           >
-                            <CheckBoxOutlineBlank />
+                            <BrowserNotSupportedOutlined />
                           </IconButton>
                         </Tooltip>
                       ) : (

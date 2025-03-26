@@ -1,4 +1,5 @@
 import {
+  Alert,
   Box,
   Button,
   FormControlLabel,
@@ -11,7 +12,14 @@ import {
 } from "@mui/material";
 import { ModalProps } from "../../utils/interfaces/modal.props";
 import { ClientsProps } from "../../utils/interfaces/interfaces";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
+import useCrudActions from "../../state/actions/useCrudActions";
+import { CustomerType, ModalActions } from "../../utils/common.types";
+import { useEffect } from "react";
+import { LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import daysjs, { Dayjs } from "dayjs";
+import { DateCalendar } from "@mui/x-date-pickers/DateCalendar";
 
 export const ClientModal: React.FC<ModalProps<ClientsProps>> = ({
   open,
@@ -23,14 +31,55 @@ export const ClientModal: React.FC<ModalProps<ClientsProps>> = ({
   const {
     control,
     handleSubmit,
+    reset,
     formState: { isDirty },
   } = useForm<ClientsProps>({
     defaultValues: data || {},
   });
 
-  const onSubmit = handleSubmit((data) => {
-    console.log(data);
+  useEffect(() => {
+    if (data) {
+      //Reset fills the values to use it in the Controller
+      reset(data);
+    }
+  }, [data]);
+
+  const { create, update, disable, enable } =
+    useCrudActions<ClientsProps>("clients");
+
+  const onSubmit = handleSubmit((formData) => {
+    endpointAction(actions, formData);
   });
+
+  const fieldDisabled = (field: ModalActions) =>
+    field !== "Editar" && field !== "Crear";
+
+  const endpointAction = (action: ModalActions, payload: ClientsProps) => {
+    console.log(action);
+    switch (action) {
+      case ModalActions.CREATE:
+        create(payload);
+        break;
+      case ModalActions.EDIT:
+        if (!payload._id) return console.log("Id faltante");
+        update(payload, payload._id);
+        break;
+
+      case ModalActions.ENABLE:
+        if (!payload._id) return console.log("Id faltante");
+
+        enable(payload._id);
+        break;
+      case ModalActions.DISABLE:
+        if (!payload._id) return console.log("Id faltante");
+
+        disable(payload._id);
+        break;
+      default:
+        break;
+    }
+    onSuccessful();
+  };
 
   return (
     <Modal className="" open={open} onClose={onClose}>
@@ -48,10 +97,15 @@ export const ClientModal: React.FC<ModalProps<ClientsProps>> = ({
           borderRadius: 2,
         }}
       >
-        <Typography variant="h6">
+        {/* Header of the modal*/}
+        <Typography variant="h5">
           <b> {actions} Cliente</b>
         </Typography>
 
+        {/* Client Data */}
+        <Typography variant="h6" sx={{ mt: 2 }}>
+          Datos del Cliente
+        </Typography>
         <Box
           sx={{
             display: "grid",
@@ -59,66 +113,122 @@ export const ClientModal: React.FC<ModalProps<ClientsProps>> = ({
             gap: 2,
           }}
         >
-          <TextField
-            label="Nombre"
-            variant="outlined"
-            fullWidth
-            value={data?.name}
-            disabled={actions !== "Editar" ? true : false}
+          <Controller
+            control={control}
+            name="contact.name"
+            render={({ field }) => {
+              return (
+                <TextField
+                  {...field}
+                  label="Contacto"
+                  variant="outlined"
+                  fullWidth
+                  disabled={fieldDisabled(actions)}
+                />
+              );
+            }}
           />
-          <TextField
-            label="Contacto"
-            variant="outlined"
-            fullWidth
-            value={data?.contact.name}
-            disabled={actions !== "Editar" ? true : false}
+          <Controller
+            name="contact.phone"
+            control={control}
+            render={({ field }) => {
+              return (
+                <TextField
+                  {...field}
+                  label="Teléfono"
+                  variant="outlined"
+                  fullWidth
+                  value={field.value}
+                  disabled={fieldDisabled(actions)}
+                />
+              );
+            }}
           />
-          <TextField
-            label="Teléfono"
-            variant="outlined"
-            fullWidth
-            value={data?.contact.phone}
-            disabled={actions !== "Editar" ? true : false}
+
+          <Controller
+            name="contact.email"
+            control={control}
+            render={({ field }) => {
+              return (
+                <TextField
+                  {...field}
+                  label="Email"
+                  variant="outlined"
+                  fullWidth
+                  value={field.value}
+                  disabled={fieldDisabled(actions)}
+                />
+              );
+            }}
           />
-          <TextField
-            label="Email"
-            variant="outlined"
-            fullWidth
-            value={data?.contact.email}
-            disabled={actions !== "Editar" ? true : false}
+
+          <Controller
+            name="contact.address"
+            control={control}
+            render={({ field }) => {
+              return (
+                <TextField
+                  {...field}
+                  label="Dirección"
+                  variant="outlined"
+                  fullWidth
+                  value={field.value}
+                  disabled={fieldDisabled(actions)}
+                />
+              );
+            }}
           />
-          <TextField
-            label="Dirección"
-            variant="outlined"
-            fullWidth
-            value={data?.address}
-            disabled={actions !== "Editar" ? true : false}
+
+          <Controller
+            name="customerType"
+            control={control}
+            defaultValue={CustomerType.RESIDENTIAL}
+            render={({ field }) => {
+              return (
+                <Select
+                  {...field}
+                  label="Tipo de Cliente"
+                  variant="outlined"
+                  fullWidth
+                  value={field.value || CustomerType.RESIDENTIAL}
+                  disabled={fieldDisabled(actions)}
+                >
+                  <MenuItem value="Residencial">Residencial</MenuItem>
+                  <MenuItem value="Comercial">Comercial</MenuItem>
+                </Select>
+              );
+            }}
           />
-          <Select
-            label="Tipo de Cliente"
-            variant="outlined"
-            fullWidth
-            value={data?.customerType || "Residencial"}
-            disabled={actions !== "Editar" || "Crear" ? true : false}
-          >
-            <MenuItem value="Residencial">Residencial</MenuItem>
-            <MenuItem value="Comercial">Comercial</MenuItem>
-          </Select>
 
           <Box sx={{ gridColumn: "span 2" }}>
-            <FormControlLabel
-              control={<Switch checked={data?.enable} />}
-              label="Habilitado"
-              disabled={actions !== "Editar" ? true : false}
+            <Controller
+              name="enable"
+              control={control}
+              render={({ field }) => {
+                return (
+                  <FormControlLabel
+                    control={<Switch {...field} value={field.value} />}
+                    label="Servicios Activos"
+                    disabled={fieldDisabled(actions)}
+                  />
+                );
+              }}
             />
           </Box>
         </Box>
 
+        {/* Installations section */}
         <Typography variant="h6" sx={{ mt: 2 }}>
           Instalaciones
         </Typography>
 
-        {data?.installations.equipment.map((equip, index) => (
+        <Alert severity="info" sx={{ mb: 2 }}>
+          Estas son las instalaciones en operación o que el cliente ha tenido,
+          añadidas automáticamente desde el módulo de técnicos al asignarles una
+          tarea.
+        </Alert>
+
+        {data?.installations.map((equip, index) => (
           <Box
             key={index}
             sx={{
@@ -128,78 +238,82 @@ export const ClientModal: React.FC<ModalProps<ClientsProps>> = ({
               mb: 2,
             }}
           >
-            <TextField
-              label="Tipo"
-              variant="outlined"
-              fullWidth
-              value={equip.type}
-              disabled={actions !== "Editar" ? true : false}
+            <Typography variant="subtitle1" sx={{ gridColumn: "span 2" }}>
+              Instalacion {index + 1}
+            </Typography>
+            <Controller
+              name={`installations.${index}.title`}
+              control={control}
+              render={({ field }) => {
+                return (
+                  <TextField
+                    {...field}
+                    label="Título"
+                    variant="outlined"
+                    fullWidth
+                    value={equip.title}
+                    disabled={fieldDisabled(actions)}
+                  />
+                );
+              }}
             />
-            {equip.model && (
-              <TextField
-                label="Modelo"
-                variant="outlined"
-                fullWidth
-                value={equip.model}
-                disabled={actions !== "Editar" ? true : false}
-              />
-            )}
-            {equip.serialNumber && (
-              <TextField
-                label="Número de Serie"
-                variant="outlined"
-                fullWidth
-                value={equip.serialNumber}
-                disabled={actions !== "Editar" ? true : false}
-              />
-            )}
+            <Controller
+              name={`installations.${index}.description`}
+              control={control}
+              render={({ field }) => {
+                return (
+                  <TextField
+                    {...field}
+                    label="Descripción"
+                    variant="outlined"
+                    fullWidth
+                    value={equip.description}
+                    disabled={fieldDisabled(actions)}
+                  />
+                );
+              }}
+            />
+            <Controller
+              name={`installations.${index}.status`}
+              control={control}
+              render={({ field }) => {
+                return (
+                  <Select
+                    {...field}
+                    label="Estado"
+                    variant="outlined"
+                    fullWidth
+                    value={equip.status || "Pendiente"}
+                    disabled={fieldDisabled(actions)}
+                  >
+                    <MenuItem value="Pendiente">Pendiente</MenuItem>
+                    <MenuItem value="Completado">Completado</MenuItem>
+                    <MenuItem value="En proceso">En Proceso</MenuItem>
+                    <MenuItem value="Cancelado">Cancelado</MenuItem>
+                  </Select>
+                );
+              }}
+            />
+            <Controller
+              name={`installations.${index}.requestedDay`}
+              control={control}
+              render={({ field }) => {
+                return (
+                  <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <DateCalendar
+                      {...field}
+                      value={field.value ? daysjs(field.value) : null}
+                      disabled={fieldDisabled(actions)}
+                      onChange={(date) => field.onChange(date)}
+                      showDaysOutsideCurrentMonth
+                      fixedWeekNumber={6}
+                    />
+                  </LocalizationProvider>
+                );
+              }}
+            />
           </Box>
         ))}
-
-        <Select
-          label="Estado"
-          variant="outlined"
-          fullWidth
-          value={data?.installations.status || "Pendiente"}
-          disabled={actions !== "Editar" ? true : false}
-        >
-          <MenuItem value="Pendiente">Pendiente</MenuItem>
-          <MenuItem value="Completado">Completado</MenuItem>
-          <MenuItem value="En Proceso">En Proceso</MenuItem>
-          <MenuItem value="Cancelado">Cancelado</MenuItem>
-        </Select>
-
-        <Typography variant="h6" sx={{ mt: 2 }}>
-          Mantenimiento
-        </Typography>
-
-        <Box
-          sx={{
-            display: "grid",
-            gridTemplateColumns: "repeat(2, 1fr)",
-            gap: 2,
-          }}
-        >
-          <TextField
-            label="Descripción"
-            variant="outlined"
-            fullWidth
-            value={data?.maintenance.description}
-            disabled={actions !== "Editar" ? true : false}
-          />
-          <Select
-            label="Estado"
-            variant="outlined"
-            fullWidth
-            value={data?.maintenance.status || "Pendiente"}
-            disabled={actions !== "Editar" ? true : false}
-          >
-            <MenuItem value="Pendiente">Pendiente</MenuItem>
-            <MenuItem value="Completado">Completado</MenuItem>
-            <MenuItem value="En Proceso">En Proceso</MenuItem>
-            <MenuItem value="Cancelado">Cancelado</MenuItem>
-          </Select>
-        </Box>
 
         <Box sx={{ display: "flex", justifyContent: "flex-end", mt: 2 }}>
           <Button onClick={onClose} color="error" variant="contained">
@@ -209,7 +323,8 @@ export const ClientModal: React.FC<ModalProps<ClientsProps>> = ({
             color="primary"
             sx={{ ml: 2 }}
             variant="contained"
-            disabled={actions === "Ver" && isDirty}
+            disabled={actions === "Ver"}
+            onClick={onSubmit}
           >
             {actions} cliente
           </Button>
