@@ -6,4 +6,5 @@ export interface ModalProps<T> {
   data: T | null;
   onClose: () => void;
   onSuccessful: () => void;
+  extra?: any;
 }

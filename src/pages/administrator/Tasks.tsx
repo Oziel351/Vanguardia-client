@@ -13,20 +13,10 @@ const TASKS_COLUMNS = [
     title: "Titulo",
     dataIndex: "title",
   },
+
   {
-    title: "Tipo de tarea",
-    dataIndex: "taskType",
-  },
-  {
-    title: "Fecha de programacion",
-    dataIndex: "scheduleDate",
-  },
-  {
-    title: "Estatus",
-    dataIndex: "status",
-    render: (status: ActionStatus) => {
-      return <Tags status={status} />;
-    },
+    title: "Fecha de creación",
+    dataIndex: "createdAt",
   },
 ];
 

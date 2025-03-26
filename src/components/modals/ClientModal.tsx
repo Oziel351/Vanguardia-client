@@ -28,12 +28,7 @@ export const ClientModal: React.FC<ModalProps<ClientsProps>> = ({
   onClose,
   onSuccessful,
 }) => {
-  const {
-    control,
-    handleSubmit,
-    reset,
-    formState: { isDirty },
-  } = useForm<ClientsProps>({
+  const { control, handleSubmit, reset } = useForm<ClientsProps>({
     defaultValues: data || {},
   });
 

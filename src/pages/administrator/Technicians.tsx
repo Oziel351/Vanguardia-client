@@ -6,10 +6,12 @@ import { Alert, AlertTitle, Button, Chip } from "@mui/material";
 import { TechniciansProps } from "../../utils/interfaces/interfaces";
 import { TechnicianModal } from "../../components/modals/TechniciansModal";
 import {
+  Assignment,
   EngineeringOutlined,
   PersonAdd,
-  TaskOutlined,
 } from "@mui/icons-material";
+import { DeleteModal } from "../../components/modals/DeleteModal";
+import { TaskModal } from "../../components/modals/TasksModal";
 
 const columns = [
   {
@@ -38,10 +40,17 @@ const columns = [
 ];
 
 const Technicians = () => {
-  const { retrieve, data, isLoading, error } =
-    useCrudActions<TechniciansProps[]>("technicians");
-  const [technician, setTechnician] = useState<TechniciansProps[]>([]);
+  const { retrieve, data, isLoading, error } = useCrudActions<{
+    technicians: TechniciansProps[];
+  }>("mix");
+
+  const [technician, setTechnician] = useState<any>([]);
+  const [tecClient, setTecClient] = useState<any>([]);
   const [modalOpen, setModalOpen] = useState(false);
+  const [modalType, setModalType] = useState<"technician" | "task">(
+    "technician"
+  );
+
   const [modalAction, setModalAction] = useState<ModalActions>(
     ModalActions.CREATE
   );
@@ -49,9 +58,14 @@ const Technicians = () => {
     null
   );
 
-  const handleModal = (action: ModalActions, row: TechniciansProps | null) => {
+  const handleModal = (
+    action: ModalActions,
+    row: TechniciansProps | null,
+    type: "technician" | "task"
+  ) => {
     setModalAction(action);
     setTechnicianRow(row);
+    setModalType(type);
     setModalOpen(true);
   };
 
@@ -61,7 +75,8 @@ const Technicians = () => {
 
   useEffect(() => {
     if (data) {
-      setTechnician(data);
+      setTechnician(data?.technicians || []);
+      setTecClient(data);
     }
   }, [data]);
 
@@ -72,8 +87,8 @@ const Technicians = () => {
           <EngineeringOutlined className="h-12 w-12  mr-2" /> Módulo de Técnicos
         </h1>
       </div>
-      <hr className="my-4 border-t border-gray-300" />
 
+      <hr className="my-4 border-t border-gray-300" />
       <Alert severity="info" className="mb-4">
         <AlertTitle>Información del Módulo de Tecnicos</AlertTitle>
         En este módulo, puedes gestionar la información de los tecnicos. Una vez
@@ -82,16 +97,19 @@ const Technicians = () => {
 
       <div className="flex justify-end items-center mb-4">
         <Button
-          className="p-4  "
+          className="p-4"
           style={{ marginRight: "6px" }}
           variant="contained"
-          onClick={() => handleModal(ModalActions.CREATE, null)}
+          onClick={() => handleModal(ModalActions.CREATE, null, "technician")}
         >
           <PersonAdd className="h-12 w-12 mr-2" /> Agregar Tecnico
         </Button>
-
-        <Button className="p-4" variant="contained">
-          <TaskOutlined className="h-5 w-5 mr-2" /> Asignar Tarea
+        <Button
+          className="p-4"
+          variant="contained"
+          onClick={() => handleModal(ModalActions.CREATE, null, "task")}
+        >
+          <Assignment /> Agregar tarea
         </Button>
       </div>
 
@@ -100,19 +118,50 @@ const Technicians = () => {
         columns={columns}
         rowKey="name"
         isLoading={isLoading}
-        onAction={handleModal}
+        onAction={() => handleModal(modalAction, technicianRow, modalType)}
       />
 
-      <TechnicianModal
-        open={modalOpen}
-        actions={modalAction}
-        data={technicianRow}
-        onClose={() => setModalOpen(false)}
-        onSuccessful={() => {
-          setModalOpen(false);
-          retrieve();
-        }}
-      />
+      {modalAction === ModalActions.DELETE && technicianRow?._id ? (
+        <DeleteModal
+          open={modalOpen}
+          _id={technicianRow._id}
+          onClose={() => setModalOpen(false)}
+          endpoint="technicians"
+          onSuccessful={() => {
+            setModalOpen(false);
+            setTimeout(() => {
+              retrieve();
+            }, 500);
+          }}
+        />
+      ) : modalType === "technician" ? (
+        <TechnicianModal
+          open={modalOpen}
+          data={technicianRow}
+          actions={modalAction}
+          onClose={() => setModalOpen(false)}
+          onSuccessful={() => {
+            setModalOpen(false);
+            setTimeout(() => {
+              retrieve();
+            }, 500);
+          }}
+        />
+      ) : (
+        <TaskModal
+          open={modalOpen}
+          data={null}
+          actions={modalAction}
+          onClose={() => setModalOpen(false)}
+          onSuccessful={() => {
+            setModalOpen(false);
+            setTimeout(() => {
+              retrieve();
+            }, 500);
+          }}
+          extra={tecClient}
+        />
+      )}
     </div>
   );
 };
