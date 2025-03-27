@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { useApiRequest } from "../../hooks/useApiRequest";
 import { useAuth, User } from "../context/AuthContext";
 import { AuthActions } from "../reducers/auth.reducer";
+import { useNavigate } from "react-router-dom";
 
 interface IAuthCredentials {
   email: string;
@@ -10,11 +11,13 @@ interface IAuthCredentials {
 
 const useAuthActions = () => {
   const { data, isLoading, error, fetchData } = useApiRequest<User>();
+  const navigate = useNavigate();
 
   const { dispatch } = useAuth();
   useEffect(() => {
     if (data) {
       dispatch({ type: AuthActions.LOGIN, payload: data });
+      navigate("/home");
     }
   }, [data]);
 
