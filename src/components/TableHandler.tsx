@@ -132,15 +132,6 @@ const TableHandler: React.FC<TableHandlerProps> = ({
                           )}
                         </>
                       )}
-                      {moduleActive === "technicians" && (
-                        <Tooltip title="Monitoreo">
-                          <IconButton
-                            onClick={() => onAction(ModalActions.FOLLOW, row)}
-                          >
-                            <MonitorHeartOutlined className="text-green-700 hover:text-green-800" />
-                          </IconButton>
-                        </Tooltip>
-                      )}
                     </TableCell>
                   </TableRow>
                 ))}
