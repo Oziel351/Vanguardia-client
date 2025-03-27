@@ -7,6 +7,7 @@ import { ModalActions } from "../../utils/common.types";
 import { ClientModal } from "../../components/modals/ClientModal";
 import { GroupOutlined, PersonAddAlt1Outlined } from "@mui/icons-material";
 import { DeleteModal } from "../../components/modals/DeleteModal";
+import FadeIn from "../../shared/animations/FadeIn";
 
 const CLIENTS_TASKS = [
   {
@@ -62,75 +63,77 @@ const Clients = () => {
   }, [data]);
 
   return (
-    <div className="bg-white p-6 rounded-lg shadow-md">
-      <div className="mb-4">
-        <h1 className="text-2xl font-semibold text-gray-800 flex items-center">
-          <GroupOutlined className="h-12 w-12  mr-2" /> Módulo de Clientes
-        </h1>
-      </div>
+    <FadeIn delay={0.2}>
+      <div className="bg-white p-6 rounded-lg shadow-md">
+        <div className="mb-4">
+          <h1 className="text-2xl font-semibold text-gray-800 flex items-center">
+            <GroupOutlined className="h-12 w-12  mr-2" /> Módulo de Clientes
+          </h1>
+        </div>
 
-      <hr className="mb-4 border-t border-gray-300" />
+        <hr className="mb-4 border-t border-gray-300" />
 
-      <Alert severity="info" className="mb-4">
-        <AlertTitle>Información del Módulo de Clientes</AlertTitle>
-        En este módulo, puedes gestionar la información de los clientes. Una vez
-        creados, son manejados en el apartado de tareas junto con los técnicos
-        para las necesidades que tengan.
-      </Alert>
-      <div className="flex justify-end items-center mb-4">
-        <Button
-          className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg flex items-center shadow-md transition-all duration-200"
-          variant="contained"
-          onClick={() => handleModal(ModalActions.CREATE, null)}
-        >
-          <PersonAddAlt1Outlined className="h-5 w-5 mr-2" /> Agregar Cliente
-        </Button>
-      </div>
+        <Alert severity="info" className="mb-4">
+          <AlertTitle>Información del Módulo de Clientes</AlertTitle>
+          En este módulo, puedes gestionar la información de los clientes. Una
+          vez creados, son manejados en el apartado de tareas junto con los
+          técnicos para las necesidades que tengan.
+        </Alert>
+        <div className="flex justify-end items-center mb-4">
+          <Button
+            className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg flex items-center shadow-md transition-all duration-200"
+            variant="contained"
+            onClick={() => handleModal(ModalActions.CREATE, null)}
+          >
+            <PersonAddAlt1Outlined className="h-5 w-5 mr-2" /> Agregar Cliente
+          </Button>
+        </div>
 
-      <div className="overflow-hidden rounded-lg shadow-lg">
-        {isLoading ? (
-          <Skeleton height={200} />
+        <div className="overflow-hidden rounded-lg shadow-lg">
+          {isLoading ? (
+            <Skeleton height={200} />
+          ) : (
+            <TableHandler
+              data={client}
+              columns={CLIENTS_TASKS}
+              rowKey="name"
+              isLoading={isLoading}
+              onAction={handleModal}
+              className="bg-white border border-gray-200 rounded-lg overflow-hidden"
+            />
+          )}
+        </div>
+
+        {/* Modal */}
+        {modalAction === ModalActions.DELETE && clientRow?._id ? (
+          <DeleteModal
+            open={modalOpen}
+            _id={clientRow._id}
+            onClose={() => setModalOpen(false)}
+            endpoint="clients"
+            onSuccessful={() => {
+              setModalOpen(false);
+              setTimeout(() => {
+                retrieve();
+              }, 500);
+            }}
+          />
         ) : (
-          <TableHandler
-            data={client}
-            columns={CLIENTS_TASKS}
-            rowKey="name"
-            isLoading={isLoading}
-            onAction={handleModal}
-            className="bg-white border border-gray-200 rounded-lg overflow-hidden"
+          <ClientModal
+            open={modalOpen}
+            actions={modalAction}
+            data={clientRow}
+            onClose={() => setModalOpen(false)}
+            onSuccessful={() => {
+              setModalOpen(false);
+              setTimeout(() => {
+                retrieve();
+              }, 500);
+            }}
           />
         )}
       </div>
-
-      {/* Modal */}
-      {modalAction === ModalActions.DELETE && clientRow?._id ? (
-        <DeleteModal
-          open={modalOpen}
-          _id={clientRow._id}
-          onClose={() => setModalOpen(false)}
-          endpoint="clients"
-          onSuccessful={() => {
-            setModalOpen(false);
-            setTimeout(() => {
-              retrieve();
-            }, 500);
-          }}
-        />
-      ) : (
-        <ClientModal
-          open={modalOpen}
-          actions={modalAction}
-          data={clientRow}
-          onClose={() => setModalOpen(false)}
-          onSuccessful={() => {
-            setModalOpen(false);
-            setTimeout(() => {
-              retrieve();
-            }, 500);
-          }}
-        />
-      )}
-    </div>
+    </FadeIn>
   );
 };
 

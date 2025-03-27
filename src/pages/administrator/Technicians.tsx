@@ -12,6 +12,7 @@ import {
 } from "@mui/icons-material";
 import { DeleteModal } from "../../components/modals/DeleteModal";
 import { TaskModal } from "../../components/modals/TasksModal";
+import FadeIn from "../../shared/animations/FadeIn";
 
 const columns = [
   {
@@ -82,91 +83,95 @@ const Technicians = () => {
   }, [data]);
 
   return (
-    <div className="bg-white shadow-lg rounded-lg p-6">
-      <div className=" mb-4">
-        <h1 className="text-2xl font-semibold text-gray-800">
-          <EngineeringOutlined className="h-12 w-12  mr-2" /> Módulo de Técnicos
-        </h1>
+    <FadeIn delay={0.2}>
+      <div className="bg-white shadow-lg rounded-lg p-6">
+        <div className=" mb-4">
+          <h1 className="text-2xl font-semibold text-gray-800">
+            <EngineeringOutlined className="h-12 w-12  mr-2" /> Módulo de
+            Técnicos
+          </h1>
+        </div>
+
+        <hr className="my-4 border-t border-gray-300" />
+        <Alert severity="info" className="mb-4">
+          <AlertTitle>Información del Módulo de Tecnicos</AlertTitle>
+          En este módulo, puedes gestionar la información de los tecnicos. Una
+          vez creados, son manejados en el apartado de tareas junto con los
+          clientes.
+        </Alert>
+
+        <div className="flex justify-end items-center mb-4">
+          <Button
+            className="p-4"
+            style={{ marginRight: "6px" }}
+            variant="contained"
+            onClick={() => handleModal(ModalActions.CREATE, null, "technician")}
+          >
+            <PersonAdd className="h-12 w-12 mr-2" /> Agregar Tecnico
+          </Button>
+          <Button
+            className="p-4"
+            variant="contained"
+            onClick={() => handleModal(ModalActions.CREATE, null, "task")}
+          >
+            <Assignment /> Agregar tarea
+          </Button>
+        </div>
+
+        <TableHandler
+          data={technician}
+          columns={columns}
+          rowKey="name"
+          isLoading={isLoading}
+          onAction={(actionType, tech) => {
+            handleModal(actionType, tech, "technician");
+          }}
+          moduleActive="technicians"
+        />
+
+        {modalAction === ModalActions.DELETE && technicianRow?._id ? (
+          <DeleteModal
+            open={modalOpen}
+            _id={technicianRow._id}
+            onClose={() => setModalOpen(false)}
+            endpoint="technicians"
+            onSuccessful={() => {
+              setModalOpen(false);
+              setTimeout(() => {
+                retrieve();
+              }, 500);
+            }}
+          />
+        ) : modalType === "technician" ? (
+          <TechnicianModal
+            open={modalOpen}
+            data={technicianRow}
+            actions={modalAction}
+            onClose={() => setModalOpen(false)}
+            onSuccessful={() => {
+              setModalOpen(false);
+              setTimeout(() => {
+                retrieve();
+              }, 500);
+            }}
+          />
+        ) : (
+          <TaskModal
+            open={modalOpen}
+            data={null}
+            actions={modalAction}
+            onClose={() => setModalOpen(false)}
+            onSuccessful={() => {
+              setModalOpen(false);
+              setTimeout(() => {
+                retrieve();
+              }, 500);
+            }}
+            extra={tecClient}
+          />
+        )}
       </div>
-
-      <hr className="my-4 border-t border-gray-300" />
-      <Alert severity="info" className="mb-4">
-        <AlertTitle>Información del Módulo de Tecnicos</AlertTitle>
-        En este módulo, puedes gestionar la información de los tecnicos. Una vez
-        creados, son manejados en el apartado de tareas junto con los clientes.
-      </Alert>
-
-      <div className="flex justify-end items-center mb-4">
-        <Button
-          className="p-4"
-          style={{ marginRight: "6px" }}
-          variant="contained"
-          onClick={() => handleModal(ModalActions.CREATE, null, "technician")}
-        >
-          <PersonAdd className="h-12 w-12 mr-2" /> Agregar Tecnico
-        </Button>
-        <Button
-          className="p-4"
-          variant="contained"
-          onClick={() => handleModal(ModalActions.CREATE, null, "task")}
-        >
-          <Assignment /> Agregar tarea
-        </Button>
-      </div>
-
-      <TableHandler
-        data={technician}
-        columns={columns}
-        rowKey="name"
-        isLoading={isLoading}
-        onAction={(actionType, tech) => {
-          handleModal(actionType, tech, "technician");
-        }}
-        moduleActive="technicians"
-      />
-
-      {modalAction === ModalActions.DELETE && technicianRow?._id ? (
-        <DeleteModal
-          open={modalOpen}
-          _id={technicianRow._id}
-          onClose={() => setModalOpen(false)}
-          endpoint="technicians"
-          onSuccessful={() => {
-            setModalOpen(false);
-            setTimeout(() => {
-              retrieve();
-            }, 500);
-          }}
-        />
-      ) : modalType === "technician" ? (
-        <TechnicianModal
-          open={modalOpen}
-          data={technicianRow}
-          actions={modalAction}
-          onClose={() => setModalOpen(false)}
-          onSuccessful={() => {
-            setModalOpen(false);
-            setTimeout(() => {
-              retrieve();
-            }, 500);
-          }}
-        />
-      ) : (
-        <TaskModal
-          open={modalOpen}
-          data={null}
-          actions={modalAction}
-          onClose={() => setModalOpen(false)}
-          onSuccessful={() => {
-            setModalOpen(false);
-            setTimeout(() => {
-              retrieve();
-            }, 500);
-          }}
-          extra={tecClient}
-        />
-      )}
-    </div>
+    </FadeIn>
   );
 };
 

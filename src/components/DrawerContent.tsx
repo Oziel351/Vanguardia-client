@@ -19,6 +19,7 @@ import {
   VisibilityOutlined,
 } from "@mui/icons-material";
 import Logo_Vanguardia from "../assets/images/Logo_Vanguardia.png";
+import FadeIn from "../shared/animations/FadeIn";
 
 const MODULES = [
   { name: "Dashboard", path: "/home/dashboard", icon: <DashboardOutlined /> },
@@ -110,7 +111,9 @@ export const DrawerContent = () => {
         marginLeft={30}
       >
         <>
-          <Outlet />
+          <FadeIn delay={0.2}>
+            <Outlet />
+          </FadeIn>
         </>
       </Box>
     </Box>
