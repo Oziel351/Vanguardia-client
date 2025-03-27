@@ -32,4 +32,5 @@ export enum ModalActions {
   DELETE = "Eliminar",
   ENABLE = "Activar",
   DISABLE = "Desactivar",
+  FOLLOW = "Monitoreo",
 }

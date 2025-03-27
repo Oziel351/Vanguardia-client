@@ -74,6 +74,7 @@ export const TechnicianModal: React.FC<ModalProps<TechniciansProps>> = ({
     onSuccessful();
   };
 
+  console.log(data);
   return (
     <Modal open={open} onClose={onClose}>
       <Box

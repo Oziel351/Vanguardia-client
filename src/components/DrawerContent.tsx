@@ -29,14 +29,9 @@ const MODULES = [
     icon: <EngineeringOutlined />,
   },
   {
-    name: "Tareas",
-    path: "/home/tasks",
+    name: "Monitoreo y Tareas",
+    path: "/home/monitoring",
     icon: <AssignmentOutlined />,
-  },
-  {
-    name: "Rutinas de vigilancia",
-    path: "/home/surveillance",
-    icon: <VisibilityOutlined />,
   },
 ];
 

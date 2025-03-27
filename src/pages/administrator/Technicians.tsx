@@ -63,6 +63,7 @@ const Technicians = () => {
     row: TechniciansProps | null,
     type: "technician" | "task"
   ) => {
+    console.log(action, type, row);
     setModalAction(action);
     setTechnicianRow(row);
     setModalType(type);
@@ -118,7 +119,10 @@ const Technicians = () => {
         columns={columns}
         rowKey="name"
         isLoading={isLoading}
-        onAction={() => handleModal(modalAction, technicianRow, modalType)}
+        onAction={(actionType, tech) => {
+          handleModal(actionType, tech, "technician");
+        }}
+        moduleActive="technicians"
       />
 
       {modalAction === ModalActions.DELETE && technicianRow?._id ? (
