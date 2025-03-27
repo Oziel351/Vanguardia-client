@@ -30,8 +30,7 @@ const routes = createBrowserRouter([
       { path: "dashboard", element: <Dashboard /> },
       { path: "clients", element: <Clients /> },
       { path: "technicians", element: <Technicians /> },
-      { path: "tasks", element: <Tasks /> },
-      { path: "surveillance", element: <Surveillance /> },
+      { path: "monitoring", element: <Tasks /> },
     ],
   },
 

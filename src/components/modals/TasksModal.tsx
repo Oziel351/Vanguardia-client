@@ -89,7 +89,7 @@ export const TaskModal: React.FC<ModalProps<TaskProps>> = ({
           borderRadius: 2,
         }}
       >
-        <Typography variant="h5">Asignar Tarea</Typography>
+        <Typography variant="h5">{actions} Tarea</Typography>
 
         <Box
           sx={{
@@ -128,6 +128,7 @@ export const TaskModal: React.FC<ModalProps<TaskProps>> = ({
             render={({ field }) => {
               return (
                 <Select
+                  {...field}
                   label="Cliente"
                   variant="outlined"
                   fullWidth
@@ -135,11 +136,13 @@ export const TaskModal: React.FC<ModalProps<TaskProps>> = ({
                   onChange={(e) => field.onChange(e.target.value)}
                   disabled={fieldDisabled(actions)}
                 >
-                  {extra?.clients.map((client: any) => (
-                    <MenuItem key={client._id} value={client._id}>
-                      {client.contact.name}
-                    </MenuItem>
-                  ))}
+                  {extra?.clients
+                    .filter((client: any) => client.enable)
+                    .map((client: any) => (
+                      <MenuItem key={client._id} value={client._id}>
+                        {client.contact.name}
+                      </MenuItem>
+                    ))}
                 </Select>
               );
             }}
@@ -151,6 +154,7 @@ export const TaskModal: React.FC<ModalProps<TaskProps>> = ({
             render={({ field }) => {
               return (
                 <Select
+                  {...field}
                   label="Técnico"
                   variant="outlined"
                   fullWidth
@@ -158,11 +162,14 @@ export const TaskModal: React.FC<ModalProps<TaskProps>> = ({
                   onChange={(e) => field.onChange(e.target.value)}
                   disabled={fieldDisabled(actions)}
                 >
-                  {extra?.technicians.map((technician: any) => (
-                    <MenuItem key={technician._id} value={technician._id}>
-                      {technician.name}
-                    </MenuItem>
-                  ))}
+                  {actions === ModalActions.CREATE &&
+                    extra?.technicians
+                      .filter((technician: any) => technician.enable)
+                      .map((technician: any) => (
+                        <MenuItem key={technician._id} value={technician._id}>
+                          {technician.name}
+                        </MenuItem>
+                      ))}
                 </Select>
               );
             }}
@@ -171,14 +178,17 @@ export const TaskModal: React.FC<ModalProps<TaskProps>> = ({
           <Typography variant="subtitle1" sx={{ gridColumn: "span 2" }}>
             Instalaciones
           </Typography>
+          {actions !== ModalActions.VIEW && (
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={addNewInstallation}
+            >
+              Agregar instalación
+            </Button>
+          )}
 
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={addNewInstallation}
-          >
-            Agregar instalación
-          </Button>
+          {}
 
           {installations.map((installation, index) => (
             <Box key={index} sx={{ gridColumn: "span 2", mb: 2 }}>
