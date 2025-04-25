@@ -1,55 +1,70 @@
-# React + TypeScript + Vite
+# Cliente (Frontend) - Sistema de Gestión de Videovigilancia
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Este es el **cliente web** del sistema desarrollado para **Seguridad Privada Vanguardia Digital de Puerto Peñasco**, fue creado como proyecto escolar con un tiempo de desarrollo de 3 semanas. Su propósito es permitir la gestión eficiente y visual de instalaciones de cámaras, monitoreos y técnicos.
+El Dashboard contiene unicamente datos estaticos, no dinamicos.
 
-Currently, two official plugins are available:
+## 🧩 Propósito del Proyecto
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+El proposito es optimizar el monitoreo, mantenimiento y administración de sistemas de videovigilancia mediante una plataforma distribuida moderna y escalable.
 
-## Expanding the ESLint configuration
+## 🖥️ Tecnologías Utilizadas
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- React.js
+- React Router
+- Axios
+- Tailwind CSS / Ant design
+- Docker
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+## 🐳 Docker
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+Este cliente cuenta con un `Dockerfile` para contenerización. Puedes levantarlo con el Docker Compose:
+# Cliente (Frontend) - Sistema de Gestión de Videovigilancia
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+Este es el **cliente web** del sistema desarrollado para **Seguridad Privada Vanguardia Digital de Puerto Peñasco**. 
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
-```
-# Vanguardia-client
+## 🧩 Propósito del Proyecto
+
+Optimizar el monitoreo, mantenimiento y administración de sistemas de videovigilancia mediante una plataforma distribuida moderna y escalable.
+
+## 🖥️ Tecnologías Utilizadas
+
+- React.js
+- React Router
+- Axios
+- Tailwind CSS / Chakra UI
+- Zustand / Redux (si aplica)
+- Docker
+
+## 🐳 Docker
+
+El lado del cliente cuenta con un `Dockerfile` para contenerización. Puedes levantarlo creando en la carpeta raiz del proyecto un archivo llamado "compose.yml" y pegar lo siguiente, tomando en cuenta el nombre del contexto de la carpeta, si no esta bien nombrado no podrá construirse, dos opciones son o cambiar el nombre de la carpeta o cambiar el nombre en el compose, despues de ello hacer "docker compose up --build" o "docker compose build" para construir el proyecto y se instalen las dependencias, uso de WSL2 para poder correrlo por dependencias como bcrypt:
+
+services:
+  api:
+    container_name: vanguardia_api
+    build:
+      context: ./vanguardia-api
+      dockerfile: dockerfile.api
+    volumes:
+      - ./vanguardia-api:/app
+    ports:
+      - "3000:3000"
+    networks:
+      - vanguardia-network
+
+  client:
+    container_name: vanguardia_client
+    build:
+      context: ./vanguardia-client
+      dockerfile: dockerfile.client
+    volumes:
+      - ./vanguardia-client:/app
+    ports:
+      - "5173:5173"
+    networks:
+      - vanguardia-network
+
+networks:
+  vanguardia-network:
+    driver: bridge
+
