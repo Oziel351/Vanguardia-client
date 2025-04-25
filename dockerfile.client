@@ -1,34 +1,13 @@
-#Dockerfile with multistage build for the client
-# Build stage client
-FROM node:23.8-bullseye AS client
-
+FROM node:23.8-bullseye 
 WORKDIR /app
 
-# Copy package files first to leverage caching
 COPY package.json package-lock.json ./
-
-
-
-# Copy the entire project
-COPY . .
-
-# Build the project with the script of the package.json
-RUN npm run build
-
-# Production stage
-FROM node:23.8-bullseye
-
-WORKDIR /app
-
-# Copy necessary files from the build stage
-COPY --from=client /app/package.json .
-COPY --from=client /app/package-lock.json .
-COPY --from=client /app/dist .
 
 RUN npm install
 
-# Expose the port
+COPY . .
+
 EXPOSE 5173
 
-# Start the application
+# Comando para desarrollo
 CMD ["npm", "run", "dev"]
