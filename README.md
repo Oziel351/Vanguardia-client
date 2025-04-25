@@ -17,26 +17,6 @@ El proposito es optimizar el monitoreo, mantenimiento y administración de siste
 
 ## 🐳 Docker
 
-Este cliente cuenta con un `Dockerfile` para contenerización. Puedes levantarlo con el Docker Compose:
-# Cliente (Frontend) - Sistema de Gestión de Videovigilancia
-
-Este es el **cliente web** del sistema desarrollado para **Seguridad Privada Vanguardia Digital de Puerto Peñasco**. 
-
-## 🧩 Propósito del Proyecto
-
-Optimizar el monitoreo, mantenimiento y administración de sistemas de videovigilancia mediante una plataforma distribuida moderna y escalable.
-
-## 🖥️ Tecnologías Utilizadas
-
-- React.js
-- React Router
-- Axios
-- Tailwind CSS / Chakra UI
-- Zustand / Redux (si aplica)
-- Docker
-
-## 🐳 Docker
-
 El lado del cliente cuenta con un `Dockerfile` para contenerización. Puedes levantarlo creando en la carpeta raiz del proyecto un archivo llamado "compose.yml" y pegar lo siguiente, tomando en cuenta el nombre del contexto de la carpeta, si no esta bien nombrado no podrá construirse, dos opciones son o cambiar el nombre de la carpeta o cambiar el nombre en el compose, despues de ello hacer "docker compose up --build" o "docker compose build" para construir el proyecto y se instalen las dependencias, uso de WSL2 para poder correrlo por dependencias como bcrypt:
 
 services:
